@@ -1,0 +1,43 @@
+version: 1
+
+project:
+  framework: flutter
+  backend: supabase
+  platforms: [android]
+
+release:
+  require_zero_critical: true
+  require_zero_high: true
+  minimum_score: 95
+  block_on_unverified_manual_critical: true
+
+flutter:
+  require_analyze: true
+  require_tests: true
+  min_test_width_dp: 320
+  common_test_widths_dp: [320, 360, 393, 412]
+  large_text_scale: 2.0
+  require_dark_mode: true
+  require_reduced_motion: true
+  require_semantics: true
+
+supabase:
+  require_rls_on_exposed_tables: true
+  forbid_unreviewed_anon_security_definer: true
+  forbid_cross_user_write_policies: true
+  check_function_search_path: true
+  check_storage_ownership: true
+  check_migration_drift: true
+  check_internal_table_grants: true
+  check_edge_function_jwt_mode: true
+
+android:
+  require_release_signing: true
+  require_aab_build: true
+  require_deep_link_tests: true
+  require_notification_permission_test: true
+  require_predictive_back_test: true
+
+manual:
+  require_physical_device: true
+  require_store_review: true
