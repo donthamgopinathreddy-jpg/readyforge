@@ -1,0 +1,20 @@
+extends: ../../readyforge.yaml
+
+profile:
+  name: flutter-supabase-android
+  description: Strict production-readiness profile for Flutter + Supabase Android apps.
+
+required_domains:
+  - ui
+  - responsive
+  - accessibility
+  - navigation
+  - authentication
+  - authorization
+  - backend
+  - database
+  - storage
+  - notifications
+  - privacy
+  - android
+  - release
