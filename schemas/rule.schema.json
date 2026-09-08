@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ReadyForge Rule",
+  "type": "object",
+  "required": ["id", "domain", "title", "severity", "automation", "check", "acceptance"],
+  "properties": {
+    "id": {"type": "string"},
+    "domain": {"type": "string"},
+    "title": {"type": "string"},
+    "severity": {"enum": ["critical", "high", "medium", "low", "info"]},
+    "automation": {"enum": ["automatic", "semi_automatic", "manual", "device"]},
+    "check": {"type": "string"},
+    "acceptance": {"type": "array", "items": {"type": "string"}},
+    "remediation": {"type": "array", "items": {"type": "string"}},
+    "references": {"type": "array", "items": {"type": "string"}}
+  }
+}
