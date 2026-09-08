@@ -1,0 +1,146 @@
+rules:
+  - id: FLUTTER-UI-001
+    domain: ui
+    title: Ten-state coverage for data-driven screens
+    severity: high
+    automation: semi_automatic
+    check: Important screens intentionally handle default, loading, refreshing, empty, error, retry, success, disabled, degraded and offline states.
+    acceptance:
+      - Failed requests are not rendered as legitimate empty states.
+      - Refreshing preserves truthful existing content where appropriate.
+      - Retry exists for recoverable failures.
+
+  - id: FLUTTER-UI-002
+    domain: ui
+    title: No duplicate loading ownership
+    severity: medium
+    automation: semi_automatic
+    check: One logical operation must not render duplicate unrelated loading indicators or unnecessarily clear content.
+    acceptance:
+      - Pull-to-refresh does not also replace the full page with initial skeletons.
+
+  - id: FLUTTER-RESP-001
+    domain: responsive
+    title: Narrow-phone and large-text matrix
+    severity: high
+    automation: semi_automatic
+    check: Test important screens at 320, 360, 393 and 412dp and large accessibility text scale.
+    acceptance:
+      - No pixel/RenderFlex overflow.
+      - Primary actions remain reachable.
+      - Text is not clipped into ambiguity.
+      - Keyboard does not cover required controls.
+
+  - id: SUPA-RLS-001
+    domain: authorization
+    title: Exposed sensitive tables require deliberate RLS
+    severity: critical
+    automation: automatic
+    check: Data API exposed sensitive tables must have deliberate RLS or be unreachable by client roles.
+    acceptance:
+      - Sensitive tables cannot be read or mutated by unintended roles.
+
+  - id: SUPA-RLS-002
+    domain: authorization
+    title: Detect permissive-policy ownership bypass
+    severity: critical
+    automation: semi_automatic
+    check: Review multiple permissive write policies for OR-combination that bypasses ownership.
+    acceptance:
+      - Account-state and ownership checks are combined in the effective write authorization path.
+
+  - id: SUPA-RLS-003
+    domain: authorization
+    title: Vetted server path cannot be bypassed by direct writes
+    severity: critical
+    automation: semi_automatic
+    check: When business logic requires RPC/Edge validation, direct table mutation must not provide a weaker path.
+    acceptance:
+      - Direct client mutation is absent or equally strict.
+
+  - id: SUPA-FN-001
+    domain: security
+    title: SECURITY DEFINER caller classification
+    severity: high
+    automation: automatic
+    check: SECURITY DEFINER functions require pinned search_path and explicit intended caller grants.
+    acceptance:
+      - Internal helpers are not executable by client roles.
+      - Public RPCs derive actor identity server-side.
+
+  - id: SUPA-FN-002
+    domain: security
+    title: Edge Function JWT mode review
+    severity: high
+    automation: semi_automatic
+    check: Every function with JWT verification disabled needs an explicit alternative-authentication or callback rationale.
+    acceptance:
+      - Public callbacks validate cryptographic state or equivalent.
+      - Internal dispatchers use private invocation or rotated secrets.
+
+  - id: SEC-SECRET-001
+    domain: security
+    title: No durable plaintext production credentials
+    severity: critical
+    automation: automatic
+    check: Scan repository, migrations, job definitions and logs for production credentials/shared secrets.
+    acceptance:
+      - Secrets are in approved secret management.
+      - Exposed secrets are rotated.
+
+  - id: ANDROID-REL-001
+    domain: android
+    title: Production signing required
+    severity: critical
+    automation: automatic
+    check: Release build must not fall back to debug signing.
+    acceptance:
+      - Signed AAB is produced using release/upload credentials.
+
+  - id: ANDROID-REL-002
+    domain: android
+    title: Deep-link verification
+    severity: high
+    automation: device
+    check: Supported links must work on cold start, warm start and process death.
+    acceptance:
+      - Each supported link routes exactly once.
+      - Invalid links fail safely.
+
+  - id: ANDROID-REL-003
+    domain: android
+    title: Predictive back behavior
+    severity: high
+    automation: device
+    check: Android predictive/system back must not interrupt protected transactions or create invalid navigation.
+    acceptance:
+      - Critical submissions cannot be duplicated or escaped mid-flight.
+
+  - id: PRIV-DEL-001
+    domain: privacy
+    title: End-to-end account deletion
+    severity: critical
+    automation: semi_automatic
+    check: Deletion traces auth, database, storage, integrations, device tokens and retained records.
+    acceptance:
+      - User-owned operational data does not remain unintentionally.
+      - Retained records have a documented/minimized policy.
+      - Third-party tokens/integrations are revoked or invalidated.
+
+  - id: REL-STORE-001
+    domain: release
+    title: Production artifact gate
+    severity: critical
+    automation: automatic
+    check: Store submission is blocked until a production release artifact builds successfully.
+    acceptance:
+      - Android App Bundle builds from production configuration.
+
+  - id: REL-STORE-002
+    domain: release
+    title: Store declarations reviewed
+    severity: high
+    automation: manual
+    check: Privacy policy, deletion, permissions, data-safety declarations and store listing must match actual behavior.
+    acceptance:
+      - Store declarations are manually reviewed against current production behavior.
