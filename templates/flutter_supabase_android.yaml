@@ -1,4 +1,4 @@
-extends: ../../readyforge.yaml
+extends: ../readyforge.yaml
 
 profile:
   name: flutter-supabase-android
