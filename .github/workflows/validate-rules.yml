@@ -1,0 +1,37 @@
+name: Validate ReadyForge Rules
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install validation dependencies
+        run: pip install pyyaml jsonschema
+      - name: Validate rule files
+        run: |
+          python - <<'PY'
+          import json
+          import pathlib
+          import yaml
+          from jsonschema import validate
+
+          schema = json.loads(pathlib.Path('schemas/rule.schema.json').read_text())
+          count = 0
+          for path in pathlib.Path('rules').rglob('*.yaml'):
+              data = yaml.safe_load(path.read_text()) or {}
+              for rule in data.get('rules', []):
+                  validate(rule, schema)
+                  count += 1
+                  print('OK', rule['id'], '-', path)
+          if count == 0:
+              raise SystemExit('No rules found')
+          print(f'Validated {count} rules')
+          PY
