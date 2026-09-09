@@ -1,0 +1,93 @@
+rules:
+  - id: PLAY-META-001
+    domain: playstore
+    title: Store metadata is source-controlled and validated
+    severity: high
+    automation: semi_automatic
+    check: Localized listing text, release notes and required graphics must be validated before Play sync.
+    acceptance:
+      - Metadata revision is bound to the release evidence.
+      - Required listing fields and graphics are present.
+      - Metadata claims match implemented behavior.
+
+  - id: PLAY-POLICY-001
+    domain: playstore
+    title: Public privacy policy is available when required
+    severity: critical
+    automation: semi_automatic
+    check: Apps handling personal/sensitive data must expose the required public privacy policy and keep Play declarations aligned with it.
+    acceptance:
+      - Public HTTPS policy URL resolves successfully.
+      - Policy identifies the app/developer and describes relevant data practices.
+
+  - id: PLAY-POLICY-002
+    domain: playstore
+    title: External account deletion resource exists for account-creating apps
+    severity: critical
+    automation: semi_automatic
+    check: Apps that allow account creation must expose the required external deletion-request web resource in addition to the in-app flow.
+    acceptance:
+      - Public deletion URL is functional and references the app/developer.
+      - User can initiate/request deletion without reinstalling the app.
+
+  - id: PLAY-HEALTH-001
+    domain: playstore
+    title: Health declaration and minimum permission scope
+    severity: critical
+    automation: semi_automatic
+    check: Health/fitness apps must complete the applicable Play Health apps declaration and request only necessary health data permissions.
+    acceptance:
+      - Health features and Health Connect data types are accurately declared.
+      - Public privacy policy describes health data access/use/retention/deletion.
+      - Requested permissions map to user-facing features.
+
+  - id: PLAY-BUILD-001
+    domain: playstore
+    title: Release artifact identity is immutable across promotion
+    severity: critical
+    automation: automatic
+    check: The AAB uploaded/promoted must match the commit/version/hash that passed ReadyForge release gates.
+    acceptance:
+      - Commit SHA, versionCode and AAB SHA-256 are recorded.
+      - A different artifact cannot reuse the same release evidence.
+
+  - id: PLAY-TRACK-001
+    domain: playstore
+    title: Internal testing precedes production
+    severity: high
+    automation: semi_automatic
+    check: A new release must pass the configured testing track and device/E2E gates before production promotion.
+    acceptance:
+      - Internal release exists for the verified artifact.
+      - Required device/E2E evidence is complete before promotion.
+
+  - id: PLAY-REVIEW-001
+    domain: playstore
+    title: Play edit is validated before commit/submission
+    severity: critical
+    automation: automatic
+    check: Build/metadata/track changes should use a validated Android Publisher Edit before commit when API automation is configured.
+    acceptance:
+      - Edit validation succeeds.
+      - Commit result is recorded separately from Google approval/review state.
+
+  - id: PLAY-ROLLOUT-001
+    domain: playstore
+    title: Production uses explicit staged rollout controls
+    severity: high
+    automation: semi_automatic
+    check: Production promotion must require explicit approval and support staged rollout/halt controls.
+    acceptance:
+      - Production is never silently promoted to 100%.
+      - Rollout fraction and state are recorded.
+      - Halt path is available.
+
+  - id: PLAY-SECRETS-001
+    domain: playstore
+    title: Play API and signing credentials remain outside Git
+    severity: critical
+    automation: automatic
+    check: Google service-account credentials and signing private material must be provided through approved secret management only.
+    acceptance:
+      - No service-account JSON or signing private key is committed.
+      - CI uses secret management and least-privilege Play permissions.
